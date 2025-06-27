@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>World Explorer</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <header>
+    <h1>🌍 World Explorer</h1>
+    <p>Discover your travel personality, explore beautiful places, and get real-time weather updates!</p>
+  </header>
+
+  <section class="quiz">
+    <h2>🧭 What Kind of Traveler Are You?</h2>
+    <div id="quiz-container">
+      <p>Choose your preferred experience:</p>
+      <button onclick="selectAnswer('Adventure')">Hiking Mountains</button>
+      <button onclick="selectAnswer('Relaxation')">Beach & Spa</button>
+      <button onclick="selectAnswer('Culture')">Museums & Cities</button>
+      <p id="result"></p>
+    </div>
+  </section>
+
+  <section class="carousel">
+    <h2>🖼 Top Destinations</h2>
+    <div class="carousel-container">
+      <img id="carousel-image" src="https://source.unsplash.com/600x400/?travel" alt="Travel" />
+      <button onclick="changeImage()">⏩ Next</button>
+    </div>
+  </section>
+
+  <section class="weather">
+    <h2>🌦 Weather Checker</h2>
+    <input type="text" id="city" placeholder="Enter City Name" />
+    <button onclick="getWeather()">Check Weather</button>
+    <div id="weather-result"></div>
+  </section>
+
+  <footer>
+    <p>Created by Dev 🌟 Internship Project</p>
+  </footer>
+
+  <script>
+    // Quiz Logic
+function selectAnswer(type) {
+  const result = document.getElementById("result");
+  let message = "";
+  switch (type) {
+    case 'Adventure':
+      message = "You're an Adventurer! Try the Alps or Patagonia.";
+      break;
+    case 'Relaxation':
+      message = "You love Peace! Maldives or Bali is for you.";
+      break;
+    case 'Culture':
+      message = "You're a Culture Buff! Paris or Kyoto awaits.";
+      break;
+  }
+  result.textContent = message;
+}
+
+// Carousel Logic
+const images = [
+  "https://source.unsplash.com/600x400/?bali",
+  "https://source.unsplash.com/600x400/?switzerland",
+  "https://source.unsplash.com/600x400/?tokyo",
+  "https://source.unsplash.com/600x400/?rome",
+  "https://source.unsplash.com/600x400/?maldives"
+];
+let current = 0;
+function changeImage() {
+  current = (current + 1) % images.length;
+  document.getElementById("carousel-image").src = images[current];
+}
+
+// Weather API
+async function getWeather() {
+  const city = document.getElementById("city").value;
+  const apiKey = "cf464871fc05aacab13ec94bf577dd4f"; 
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    document.getElementById("weather-result").innerHTML =
+      `Temperature in ${data.name}: ${data.main.temp}°C <br> ${data.weather[0].description}`;
+  } catch (err) {
+    document.getElementById("weather-result").textContent = "City not found.";
+  }
+}
+
+  </script>
+</body>
+</html>
